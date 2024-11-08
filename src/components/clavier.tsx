@@ -35,7 +35,9 @@ const Clavier: React.FC<ClavierProps> = ({
       <Button variant="contained" onClick={onEnter} disabled={inactif}>
         Entrer
       </Button>
+      
     </Box>
+    
   );
 };
 

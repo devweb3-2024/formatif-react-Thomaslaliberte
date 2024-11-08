@@ -25,7 +25,10 @@ const GrilleMot: React.FC<GrilleMotsProps> = ({
     return 'grey.500';
   };
 
+  //TL grossir la taille des cases pour quelles aient assez de place pour les caracteres
+  //TL fait que la couoleur ne s'affiche qu'une fois le mot entré
   return (
+    
     <Grid container spacing={1} sx={{ marginTop: 2 }}>
       {rows.map((row, rowIndex) => (
         <Grid container item spacing={1} key={rowIndex}>
@@ -37,10 +40,11 @@ const GrilleMot: React.FC<GrilleMotsProps> = ({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  backgroundColor: obtenirCouleurLettre(letter, index),
+                  backgroundColor: rowIndex<essais.length?obtenirCouleurLettre(letter, index):'grey.500',
                   color: 'white',
                   fontSize: 24,
                   fontWeight: 'bold',
+                  width: 104
                 }}
               >
                 {letter}

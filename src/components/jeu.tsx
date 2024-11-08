@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Snackbar, Alert } from '@mui/material';
+import { Container, Snackbar, Alert, Button } from '@mui/material';
 import GrilleMot from './grillemots';
 import { obtenirMotAleatoire, listeMots } from '../utils/mots';
 import Clavier from './clavier';
@@ -32,7 +32,8 @@ const Jeu: React.FC = () => {
         text: 'Félicitations ! Vous avez trouvé le mot !',
         severity: 'success',
       });
-    } else if (essais.length >= 6) {
+      //TL fait que le jeu arrete apres 5 essaies
+    } else if (essais.length >= 5) {
       setFinPartie(true);
       setMessage({
         text: `Dommage ! Le mot était "${motCible}".`,
@@ -49,12 +50,17 @@ const Jeu: React.FC = () => {
       });
       return;
     }
-    if (
-      !listeMots.includes(
-        essaiCourant.charAt(0).toUpperCase() +
-          essaiCourant.slice(1).toLowerCase()
-      )
-    ) {
+    //TL ajout d'une fonction qui verifie si le mot est dans la liste
+    var motTrouve = false;
+    listeMots.forEach(mot => {
+      if(!motTrouve){
+        if(mot.normalize("NFD").replace(/[\u0300-\u036f]/g, "") == essaiCourant){
+          motTrouve = true;
+        }
+      }
+    });
+
+    if (!motTrouve) {
       setMessage({
         text: "Ce mot n'est pas dans la liste.",
         severity: 'error',
@@ -65,6 +71,11 @@ const Jeu: React.FC = () => {
     setEssaiCourant('');
   };
 
+  //TL ajout fonction recommencer
+  function recommencer(): void {
+    window.location.reload();
+  }
+//TL ajout bouton recommencer
   return (
     <Container maxWidth="sm">
       <GrilleMot
@@ -78,6 +89,9 @@ const Jeu: React.FC = () => {
         onEnter={handleSoumettreEssai}
         inactif={finPartie}
       />
+      <Button variant="contained" onClick={recommencer} sx={{ marginTop: 2}}>
+        Redemarer la partie
+      </Button>
       {message && (
         <Snackbar open autoHideDuration={6000} onClose={() => setMessage(null)}>
           <Alert
